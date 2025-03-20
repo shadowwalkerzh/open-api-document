@@ -1,4 +1,4 @@
-FROM ruby:3.1.0-slim
+FROM ruby:2.6-slim
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
         nodejs \
-    && gem install bundler \
+    && gem install bundler -v 2.1.4\
     && bundle install \
     && apt-get remove -y build-essential \
     && apt-get autoremove -y \
