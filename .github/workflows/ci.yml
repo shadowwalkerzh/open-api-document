@@ -1,0 +1,32 @@
+name: Docker CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Read version
+      id: vars
+      run: echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
+
+    - name: Build and push Docker image
+      run: |
+        docker build -t walkerzhuo/open-api-document:${{ env.VERSION }} .
+        docker push walkerzhuo/open-api-document:${{ env.VERSION }}
